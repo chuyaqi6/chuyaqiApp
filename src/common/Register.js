@@ -56,7 +56,7 @@ export default class Register extends Component {
                         <Icon style={{marginLeft:10,color:'#cc00ff'}} size={26} name="user"/>
                         <TextInput
                           placeholder="请输入用户名"
-                          fontSize={16}
+                          fontSize={14}
                           placeholderTextColor='gray'
                           onChangeText={this.userhandle} 
                         />
@@ -72,7 +72,7 @@ export default class Register extends Component {
                         <Icon style={{marginLeft:10,color:'#cc00ff'}} size={26} name="lock"/>
                         <TextInput
                           placeholder="请输入密码"
-                          fontSize={16}
+                          fontSize={14}
                           placeholderTextColor='gray'
                           onChangeText={this.pwdhandle} 
                           secureTextEntry={true}
@@ -89,7 +89,7 @@ export default class Register extends Component {
                         <Icon style={{marginLeft:10,color:'#cc00ff'}} size={26} name="lock"/>
                         <TextInput
                           placeholder="请确认密码"
-                          fontSize={16}
+                          fontSize={14}
                           placeholderTextColor='gray'
                           onChangeText={this.pwdhandle} 
                           secureTextEntry={true}

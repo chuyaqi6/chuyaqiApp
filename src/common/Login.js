@@ -74,7 +74,7 @@ export default class Login extends Component {
                         <Icon style={{marginLeft:10,color:'#cc00ff'}} size={26} name="user"/>
                         <TextInput
                           placeholder="用户名"
-                          fontSize={16}
+                          fontSize={14}
                           placeholderTextColor='gray'
                           onChangeText={this.userhandle} 
                         />
@@ -90,7 +90,7 @@ export default class Login extends Component {
                         <Icon style={{marginLeft:10,color:'#cc00ff'}} size={26} name="lock"/>
                         <TextInput
                           placeholder="密码"
-                          fontSize={16}
+                          fontSize={14}
                           placeholderTextColor='gray'
                           onChangeText={this.pwdhandle} 
                           secureTextEntry={true}
