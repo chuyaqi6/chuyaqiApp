@@ -8,8 +8,10 @@ import Eactivities from './Eactivities';
 const {width,scale} = Dimensions.get('window');
 const s = width / 640;
 const options = {
-    title: 'Select Avatar',
-    customButtons: [{ name: 'fb', title: 'Choose Photo from Facebook' }],
+    title: '请选择',
+    cancelButtonTitle:'取消',
+    takePhotoButtonTitle:'拍照',
+    chooseFromLibraryButtonTitle:'从相册中选择',
     storageOptions: {
       skipBackup: true,
       path: 'images',

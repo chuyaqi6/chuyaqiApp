@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { Text, View, TextInput,TouchableOpacity,AsyncStorage,Dimensions,StyleSheet} from 'react-native'
+import { Text, View, TextInput,TouchableOpacity,AsyncStorage,Dimensions,StyleSheet,ToastAndroid} from 'react-native'
 import { Actions } from 'react-native-router-flux'
 import { Icon } from '@ant-design/react-native';
 import {myFetch} from '../utils'
@@ -11,6 +11,7 @@ export default class Register extends Component {
         this.state = {
             username:'',
             pwd:'',
+            rpwd:'',
         }
     }
     userhandle = (text)=>{
@@ -19,26 +20,37 @@ export default class Register extends Component {
     pwdhandle = (text)=>{
         this.setState({pwd:text})
     }
+    rpwdhandle = (text)=>{
+        this.setState({rpwd:text})
+    }
     back = ()=>{
-        myFetch.post('/register',{
-            username:this.state.username,
-            pwd:this.state.pwd
-        })
-        .then(res=>
-            AsyncStorage.setItem('newuser',JSON.stringify(res.data))
-            .then(()=>{
-                Actions.login();
+        if(this.state.username != '' && this.state.pwd != '' && this.state.rpwd != ''){
+            myFetch.post('/register',{
+                username:this.state.username,
+                pwd:this.state.pwd,
+                rpwd:this.state.rpwd
             })
-        )
+            .then(res=>{
+                console.log(res)
+                if(res.data.isSuccess === true){
+                    AsyncStorage.setItem('newuser',JSON.stringify(res.data))
+                    .then(()=>{
+                        ToastAndroid.show('注册成功，正在跳转……',500);
+                        Actions.login();
+                    })
+                }else{
+                    ToastAndroid.show('密码不一致', 1000);
+                    return true;
+                }   
+            })
+        }else{
+            ToastAndroid.show('用户名或密码不能为空！', 1000);
+            return true;
+        }
     }
     render() {
         return (
-            <View style={{flex:1,backgroundColor:'#fff'}}>
-                <View style={styles.header}>
-                    <TouchableOpacity onPress={() => Actions.login()}>
-                        <Icon name='left' color='#cc00ff' size={28} style={{ marginLeft: 20 * s }} />
-                    </TouchableOpacity>
-                </View>
+            <View style={{flex:1,backgroundColor:'#fff',justifyContent:'center'}}>
                 <View style={{
                   alignItems:'center',
                   justifyContent:'center',
@@ -91,7 +103,7 @@ export default class Register extends Component {
                           placeholder="请确认密码"
                           fontSize={14}
                           placeholderTextColor='gray'
-                          onChangeText={this.pwdhandle} 
+                          onChangeText={this.rpwdhandle} 
                           secureTextEntry={true}
                         />
                     </View>
@@ -107,18 +119,24 @@ export default class Register extends Component {
                         borderRadius:20
                       }}
                       onPress={this.back}>
-                        <Text style={{color:'#fff',fontSize:18}}>注册成功</Text>
+                        <Text style={{color:'#fff',fontSize:18}}>注册</Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity
+                        style={{
+                            alignItems:'center',
+                            width:'50%',
+                            marginRight:10,
+                            marginTop:20,
+                            backgroundColor:'#cc00ff',
+                            height:40,
+                            justifyContent:'center',
+                            borderRadius:20
+                          }} 
+                     onPress={() => Actions.login()}>
+                        <Text style={{color:'#fff',fontSize:18}}>返回登陆</Text>
                     </TouchableOpacity>
                 </View>
             </View>
         )
     }
 }
-const styles = StyleSheet.create({
-    header: {
-        flexDirection: 'row',
-        alignItems: 'center',
-        height: 70 * s,
-        marginBottom:300*s
-    },
-})

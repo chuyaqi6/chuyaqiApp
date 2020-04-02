@@ -38,18 +38,30 @@ export default class Login extends Component {
         this.setState({pwd:text})
     }
     login = ()=>{
-        this.setState({isloading:true})
-        myFetch.post('/login',{
-            username:this.state.username,
-            pwd:this.state.pwd
-        })
-        .then(res=>
-            AsyncStorage.setItem('user',JSON.stringify(res.data))
-            .then(()=>{
-                this.setState({isloading:false})
-                Actions.homePage();
+        if(this.state.username != '' && this.state.pwd != ''){
+            this.setState({isloading:true})
+            myFetch.post('/login',{
+                username:this.state.username,
+                pwd:this.state.pwd
             })
-        )
+            .then(res=>{
+                console.log(res);
+                if(res.data.tag === true){
+                    AsyncStorage.setItem('user',JSON.stringify(res.data))
+                    .then(()=>{
+                        ToastAndroid.show('正在登录……', 100)
+                        this.setState({isloading:false})
+                        Actions.homePage()
+                    })
+                }else{
+                    ToastAndroid.show('用户名或密码错误', 1000);
+                    return true;
+                }
+            })
+        }else{
+            ToastAndroid.show('用户名或密码不能为空！', 1000);
+            return true;
+        }
     }
     register = ()=>{
         Actions.register();
@@ -125,14 +137,7 @@ export default class Login extends Component {
                         <Text style={{color:'#fff',fontSize:18}}>注册</Text>
                     </TouchableOpacity>
                 </View>
-                {
-                    this.state.isloading
-                    ?<View style={{margin:0,width:'100%',height:'120%',alignItems:'center',justifyContent:'center',zIndex:99,backgroundColor:'#fff'}}>
-                        <Icon name='loading' color='#cc00ff' size={45}/>
-                        <Text style={{marginTop:20,color:'#cc00ff'}}>正在登录...</Text>
-                    </View>
-                    :null
-                }
+                
             </View>
         )
     }
